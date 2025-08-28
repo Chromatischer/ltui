@@ -8,7 +8,8 @@
         "src/?/init.lua"
     ],
     "Lua.workspace.library": [
-        "src"
+        "src",
+        "types"
     ],
     "Lua.workspace.checkThirdParty": false,
     "Lua.diagnostics.globals": [
@@ -25,5 +26,7 @@
     "Lua.completion.keywordSnippet": "Both",
     "Lua.completion.displayContext": 5,
     "Lua.format.enable": true,
-    "Lua.telemetry.enable": false
+    "Lua.telemetry.enable": false,
+    "Lua.workspace.preloadFileSize": 1048576,
+    "Lua.type.castNumberToInteger": true
 }
