@@ -19,20 +19,34 @@
 --
 
 -- load modules
+---@type ltui.base.os
 local os        = require("ltui/base/os")
+---@type ltui.base.log
 local log       = require("ltui/base/log")
+---@type ltui.rect
 local rect      = require("ltui/rect")
+---@type ltui.event
 local event     = require("ltui/event")
+---@type ltui.curses
 local curses    = require("ltui/curses")
+---@type ltui.program
 local program   = require("ltui/program")
+---@type ltui.desktop
 local desktop   = require("ltui/desktop")
+---@type ltui.menubar
 local menubar   = require("ltui/menubar")
+---@type ltui.statusbar
 local statusbar = require("ltui/statusbar")
 
--- define module
+---@class ltui.application : ltui.program
+---@field _MENUBAR ltui.menubar Application menu bar
+---@field _DESKTOP ltui.desktop Application desktop/workspace
+---@field _STATUSBAR ltui.statusbar Application status bar
 local application = application or program()
 
--- init application
+---Initialize application
+---@param name string Application name
+---@param argv? table Command line arguments
 function application:init(name, argv)
 
     -- init log
@@ -49,7 +63,7 @@ function application:init(name, argv)
     log:print("<application: %s>: init ok", name)
 end
 
--- exit application
+---Exit and cleanup application
 function application:exit()
 
     -- exit program
@@ -59,7 +73,8 @@ function application:exit()
     log:flush()
 end
 
--- get menubar
+---Get application menu bar
+---@return ltui.menubar Menu bar instance
 function application:menubar()
     if not self._MENUBAR then
         self._MENUBAR = menubar:new("menubar", rect{0, 0, self:width(), 1})
@@ -67,7 +82,8 @@ function application:menubar()
     return self._MENUBAR
 end
 
--- get desktop
+---Get application desktop/workspace
+---@return ltui.desktop Desktop instance
 function application:desktop()
     if not self._DESKTOP then
         self._DESKTOP = desktop:new("desktop", rect{0, 1, self:width(), self:height() - 1})
@@ -124,5 +140,5 @@ function application:run(...)
     end
 end
 
--- return module
+---@type ltui.application
 return application

@@ -19,18 +19,29 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log     = require("ltui/base/log")
+---@type ltui.rect
 local rect    = require("ltui/rect")
+---@type ltui.point
 local point   = require("ltui/point")
+---@type ltui.panel
 local panel   = require("ltui/panel")
+---@type ltui.event
 local event   = require("ltui/event")
+---@type ltui.curses
 local curses  = require("ltui/curses")
+---@type ltui.action
 local action  = require("ltui/action")
 
--- define module
+---@class ltui.program : ltui.panel
+---@field _NAME string Program name
+---@field _ARGV table Command line arguments
 local program = program or panel()
 
--- init program
+---Initialize program
+---@param name string Program name
+---@param argv? table Command line arguments
 function program:init(name, argv)
 
     -- init main window
@@ -487,5 +498,5 @@ function program:_refresh_cursor()
     end
 end
 
--- return module
+---@type ltui.program
 return program

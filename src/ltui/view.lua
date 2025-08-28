@@ -19,19 +19,42 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.base.table  
 local table  = require("ltui/base/table")
+---@type ltui.rect
 local rect   = require("ltui/rect")
+---@type ltui.point
 local point  = require("ltui/point")
+---@type ltui.object
 local object = require("ltui/object")
+---@type ltui.canvas
 local canvas = require("ltui/canvas")
+---@type ltui.curses
 local curses = require("ltui/curses")
+---@type ltui.action
 local action = require("ltui/action")
 
--- define module
+---@class ltui.view : ltui.object
+---@field _TYPE string View type identifier
+---@field _STATE table View state (visible, focused, selected, etc.)
+---@field _OPTIONS table View options (selectable, mouseable, etc.)
+---@field _ATTRS table View attributes  
+---@field _ACTIONS table View actions
+---@field _EXTRAS table Extra view data
+---@field _NAME string View name
+---@field _BOUNDS ltui.rect View bounds
+---@field _CANVAS ltui.canvas View canvas for drawing
+---@field _CHILDREN table List of child views
+---@field _PARENT ltui.view Parent view
 local view = view or object()
 
--- new view instance
+---Create a new view instance
+---@param name string View name
+---@param bounds ltui.rect View bounds  
+---@param ... any Additional constructor arguments
+---@return ltui.view New view instance
 function view:new(name, bounds, ...)
 
     -- create instance
@@ -44,7 +67,9 @@ function view:new(name, bounds, ...)
     return self
 end
 
--- init view
+---Initialize view with name and bounds
+---@param name string View name
+---@param bounds ltui.rect View bounds
 function view:init(name, bounds)
 
     -- check
