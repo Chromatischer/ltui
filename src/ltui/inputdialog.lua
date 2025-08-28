@@ -29,7 +29,8 @@ local window     = require("ltui/window")
 local textedit   = require("ltui/textedit")
 local textdialog = require("ltui/textdialog")
 
--- define module
+---@class ltui.inputdialog : ltui.textdialog
+---ltui.inputdialog component
 local inputdialog = inputdialog or textdialog()
 
 -- init dialog
@@ -74,4 +75,5 @@ function inputdialog:textedit()
 end
 
 -- return module
+---@type ltui.inputdialog
 return inputdialog

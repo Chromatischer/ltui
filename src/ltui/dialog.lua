@@ -19,17 +19,27 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.rect
 local rect   = require("ltui/rect")
+---@type ltui.event
 local event  = require("ltui/event")
+---@type ltui.label
 local label  = require("ltui/label")
+---@type ltui.panel
 local panel  = require("ltui/panel")
+---@type ltui.action
 local action = require("ltui/action")
+---@type ltui.button
 local button = require("ltui/button")
+---@type ltui.window
 local window = require("ltui/window")
+---@type ltui.curses
 local curses = require("ltui/curses")
 
--- define module
+---@class ltui.dialog : ltui.window
+---Dialog component that extends window with button handling
 local dialog = dialog or window()
 
 -- update the position of all buttons
@@ -125,4 +135,5 @@ function dialog:on_event(e)
 end
 
 -- return module
+---@type ltui.dialog
 return dialog

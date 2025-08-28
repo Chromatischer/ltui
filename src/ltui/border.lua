@@ -19,16 +19,24 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.rect
 local rect   = require("ltui/rect")
+---@type ltui.view
 local view   = require("ltui/view")
+---@type ltui.label
 local label  = require("ltui/label")
+---@type ltui.curses
 local curses = require("ltui/curses")
 
--- define module
+---@class ltui.border : ltui.view
+---@field _CORNERATTR? table Corner attribute colors
 local border = border or view()
 
 -- init border
+---@param name string Border name
+---@param bounds ltui.rect Border bounds
 function border:init(name, bounds)
 
     -- init view
@@ -39,6 +47,7 @@ function border:init(name, bounds)
 end
 
 -- draw border
+---@param transparent? boolean Whether to draw transparently
 function border:on_draw(transparent)
 
     -- draw background (transparent)
@@ -85,11 +94,14 @@ function border:on_draw(transparent)
 end
 
 -- get border corner attribute
+---@return table Corner attributes {upper_left, lower_right}
 function border:cornerattr()
     return self._CORNERATTR or {"white", "black"}
 end
 
 -- set border corner attribute
+---@param attr_ul? string Upper-left corner color
+---@param attr_rl? string Lower-right corner color
 function border:cornerattr_set(attr_ul, attr_rl)
     self._CORNERATTR = {attr_ul or "white", attr_rl or attr_ul or "black"}
     self:invalidate()
@@ -102,4 +114,5 @@ function border:cornerattr_swap()
 end
 
 -- return module
+---@type ltui.border
 return border

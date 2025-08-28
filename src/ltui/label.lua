@@ -19,20 +19,30 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log         = require("ltui/base/log")
+---@type ltui.view
 local view        = require("ltui/view")
+---@type ltui.event
 local event       = require("ltui/event")
+---@type ltui.action
 local action      = require("ltui/action")
+---@type ltui.curses
 local curses      = require("ltui/curses")
 local luajit, bit = pcall(require, "bit")
 if not luajit then
     bit = require("ltui/base/bit")
 end
 
--- define module
+---@class ltui.label : ltui.view
+---@field _TEXT? string Label text content
+---Label component for displaying text
 local label = label or view()
 
 -- init label
+---@param name string Label name
+---@param bounds ltui.rect Label bounds
+---@param text? string Label text
 function label:init(name, bounds, text)
 
     -- init view
@@ -152,4 +162,5 @@ function label:splitext(text, width)
 end
 
 -- return module
+---@type ltui.label
 return label

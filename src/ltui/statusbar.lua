@@ -26,6 +26,8 @@ local label     = require("ltui/label")
 local event     = require("ltui/event")
 local curses    = require("ltui/curses")
 
+---@class ltui.statusbar : ltui.panel
+---statusbar component
 -- define module
 local statusbar = statusbar or panel()
 
@@ -51,4 +53,5 @@ function statusbar:info()
 end
 
 -- return module
+---@type ltui.statusbar
 return statusbar

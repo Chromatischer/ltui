@@ -26,6 +26,8 @@ local event     = require("ltui/event")
 local curses    = require("ltui/curses")
 local action    = require("ltui/action")
 
+---@class ltui.textarea : ltui.view
+---textarea component
 -- define module
 local textarea = textarea or label()
 
@@ -112,4 +114,5 @@ function textarea:on_event(e)
 end
 
 -- return module
+---@type ltui.textarea
 return textarea

@@ -28,6 +28,8 @@ local textarea  = require("ltui/textarea")
 local scrollbar = require("ltui/scrollbar")
 local action    = require("ltui/action")
 
+---@class ltui.textdialog : ltui.boxdialog
+---textdialog component
 -- define module
 local textdialog = textdialog or dialog()
 
@@ -125,4 +127,5 @@ function textdialog:on_event(e)
 end
 
 -- return module
+---@type ltui.textdialog
 return textdialog

@@ -24,15 +24,34 @@ if not luajit then
     bit = require("ltui/base/bit")
 end
 
--- define module: string
+---@class ltui.base.string
+---@field startswith fun(self: string, str: string): boolean
+---@field find_last fun(self: string, pattern: string, plain?: boolean): integer?
+---@field split fun(self: string, delimiter: string, strict?: boolean): string[]
+---@field trim fun(self: string): string
+---@field ltrim fun(self: string): string
+---@field rtrim fun(self: string): string
+---@field append fun(self: string, substr?: string, separator?: string): string
+---@field encode fun(self: string): string?
+---@field decode fun(self: string): string?
+---@field wcwidth fun(self: string, idx?: integer): integer
+---@field wcswidth fun(self: string, idx?: integer): integer
+---@field join fun(items: string[], sep?: string): string
+---@field tryformat fun(format: string, ...): string
+---@field ipattern fun(pattern: string, brackets?: boolean): string
 local string = string or {}
 
 -- match the start string
+---@param str string The string to match at start
+---@return boolean True if self starts with str
 function string:startswith(str)
     return self:find(str, 1, true) == 1
 end
 
 -- find the last substring with the given pattern
+---@param pattern string Pattern to search for
+---@param plain? boolean If true, treat pattern as plain text
+---@return integer? Position of last match, or nil if not found
 function string:find_last(pattern, plain)
 
     -- find the last substring
@@ -55,6 +74,9 @@ end
 -- ("1\n\n2\n3"):split('\n') => 1, 2, 3
 -- ("1\n\n2\n3"):split('\n', true) => 1, , 2, 3
 --
+---@param delimiter string Character(s) to split on
+---@param strict? boolean If true, include empty strings in result
+---@return string[] Array of split strings
 function string:split(delimiter, strict)
     local result = {}
     if strict then
@@ -68,16 +90,19 @@ function string:split(delimiter, strict)
 end
 
 -- trim the spaces
+---@return string String with leading and trailing whitespace removed
 function string:trim()
     return (self:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 -- trim the left spaces
+---@return string String with leading whitespace removed
 function string:ltrim()
     return (self:gsub("^%s*", ""))
 end
 
 -- trim the right spaces
+---@return string String with trailing whitespace removed
 function string:rtrim()
     local n = #self
     while n > 0 and s:find("^%s", n) do n = n - 1 end
@@ -85,6 +110,9 @@ function string:rtrim()
 end
 
 -- append a substring with a given separator
+---@param substr? string Substring to append (can be nil)
+---@param separator? string Separator to use (optional)
+---@return string Combined string
 function string:append(substr, separator)
 
     -- check
@@ -108,6 +136,7 @@ function string:append(substr, separator)
 end
 
 -- encode: ' ', '=', '\"', '<'
+---@return string? Encoded string or nil if self is nil
 function string:encode()
 
     -- null?
@@ -118,6 +147,7 @@ function string:encode()
 end
 
 -- decode: ' ', '=', '\"'
+---@return string? Decoded string or nil if self is nil
 function string:decode()
 
     -- null?
@@ -128,6 +158,9 @@ function string:decode()
 end
 
 -- join array to string with the given separator
+---@param items string[] Array of strings to join
+---@param sep? string Separator between items
+---@return string Joined string
 function string.join(items, sep)
 
     -- join them
@@ -147,6 +180,9 @@ function string.join(items, sep)
 end
 
 -- try to format
+---@param format string Format string
+---@param ... any Arguments for format
+---@return string Formatted string or original format if error
 function string.tryformat(format, ...)
 
     -- attempt to format it
@@ -169,6 +205,9 @@ end
 -- print(string.ipattern("sR[cd]/.*%.c", true))
 --   [sS][rR][cCdD]/.*%.[cC]
 --
+---@param pattern string Pattern to make case-insensitive
+---@param brackets? boolean Process character sets in brackets
+---@return string Case-insensitive pattern
 function string.ipattern(pattern, brackets)
     local tmp = {}
     local i = 1
@@ -219,6 +258,8 @@ function string.ipattern(pattern, brackets)
 end
 
 -- unicode width
+---@param idx? integer Start index (default 1)
+---@return integer Character width (-1 for control, 0 for zero-width, 1 for normal, 2 for wide)
 function string:wcwidth(idx)
 
     -- based on Markus Kuhn's implementation of wcswidth()
@@ -328,6 +369,8 @@ function string:wcwidth(idx)
 end
 
 -- unicode string width
+---@param idx? integer Start index (default 1)
+---@return integer Total display width of string
 function string:wcswidth(idx)
     local width = 0
     idx = idx or 1
@@ -342,4 +385,5 @@ function string:wcswidth(idx)
 end
 
 -- return module: string
+---@type ltui.base.string
 return string

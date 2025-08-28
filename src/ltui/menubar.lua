@@ -25,6 +25,8 @@ local label     = require("ltui/label")
 local panel     = require("ltui/panel")
 local curses    = require("ltui/curses")
 
+---@class ltui.menubar : ltui.panel
+---menubar component
 -- define module
 local menubar = menubar or panel()
 
@@ -49,4 +51,5 @@ function menubar:title()
 end
 
 -- return module
+---@type ltui.menubar
 return menubar

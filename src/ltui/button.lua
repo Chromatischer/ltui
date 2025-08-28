@@ -19,17 +19,28 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log       = require("ltui/base/log")
+---@type ltui.view
 local view      = require("ltui/view")
+---@type ltui.event
 local event     = require("ltui/event")
+---@type ltui.label
 local label     = require("ltui/label")
+---@type ltui.action
 local action    = require("ltui/action")
+---@type ltui.curses
 local curses    = require("ltui/curses")
 
--- define module
+---@class ltui.button : ltui.label
+---Button component that extends label with click handling
 local button = button or label()
 
 -- init button
+---@param name string Button name
+---@param bounds ltui.rect Button bounds
+---@param text? string Button text
+---@param on_action? function Action callback for button press
 function button:init(name, bounds, text, on_action)
 
     -- init label
@@ -51,6 +62,7 @@ function button:init(name, bounds, text, on_action)
 end
 
 -- draw button
+---@param transparent? boolean Whether to draw transparently
 function button:on_draw(transparent)
 
     -- draw background
@@ -78,6 +90,8 @@ function button:on_draw(transparent)
 end
 
 -- on event
+---@param e ltui.event Event to handle
+---@return boolean? True if event was handled
 function button:on_event(e)
 
     -- selected?
@@ -95,6 +109,9 @@ function button:on_event(e)
 end
 
 -- set state
+---@param name string State name
+---@param enable boolean Enable or disable state
+---@return boolean Success status
 function button:state_set(name, enable)
     if name == "focused" and self:state(name) ~= enable then
         self:invalidate()
@@ -103,4 +120,5 @@ function button:state_set(name, enable)
 end
 
 -- return module
+---@type ltui.button
 return button

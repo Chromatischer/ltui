@@ -19,13 +19,27 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.object
 local object = require("ltui/object")
 
--- define module
+---@class ltui.action : ltui.object
+---@field ac_max integer Maximum action ID
+---@field ac_on_text_changed integer Text changed action ID
+---@field ac_on_selected integer Selection action ID
+---@field ac_on_clicked integer Click action ID
+---@field ac_on_resized integer Resize action ID
+---@field ac_on_scrolled integer Scroll action ID
+---@field ac_on_enter integer Enter action ID
+---@field ac_on_load integer Load action ID
+---@field ac_on_save integer Save action ID
+---@field ac_on_exit integer Exit action ID
 local action = action or object { }
 
 -- register action types
+---@param tag string Tag name to track maximum ID
+---@vararg string Action names to register
 function action:register(tag, ...)
     local base = self[tag] or 0
     local enums = {...}
@@ -49,4 +63,5 @@ action:register("ac_max",
                 "ac_on_exit")
 
 -- return module
+---@type ltui.action
 return action

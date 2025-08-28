@@ -25,6 +25,8 @@ local event     = require("ltui/event")
 local curses    = require("ltui/curses")
 local action    = require("ltui/action")
 
+---@class ltui.scrollbar : ltui.view
+---scrollbar component
 -- define module
 local scrollbar = scrollbar or view()
 
@@ -212,4 +214,5 @@ function scrollbar:on_event(e)
 end
 
 -- return module
+---@type ltui.scrollbar
 return scrollbar
