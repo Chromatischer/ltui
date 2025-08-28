@@ -19,17 +19,27 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log       = require("ltui/base/log")
+---@type ltui.view
 local view      = require("ltui/view")
+---@type ltui.rect
 local rect      = require("ltui/rect")
+---@type ltui.panel
 local panel     = require("ltui/panel")
+---@type ltui.event
 local event     = require("ltui/event")
+---@type ltui.action
 local action    = require("ltui/action")
+---@type ltui.curses
 local curses    = require("ltui/curses")
+---@type ltui.button
 local button    = require("ltui/button")
+---@type ltui.object
 local object    = require("ltui/object")
 
--- define module
+---@class ltui.choicebox : ltui.panel
+---Choice selection box component
 local choicebox = choicebox or panel()
 
 -- init choicebox
@@ -232,4 +242,5 @@ function choicebox:_do_select()
 end
 
 -- return module
+---@type ltui.choicebox
 return choicebox

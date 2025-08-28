@@ -32,6 +32,8 @@ if not luajit then
     bit = require("ltui/base/bit")
 end
 
+---@class ltui.textedit : ltui.textarea
+---textedit component
 -- define module
 local textedit = textedit or textarea()
 
@@ -112,4 +114,5 @@ function textedit:on_event(e)
 end
 
 -- return module
+---@type ltui.textedit
 return textedit

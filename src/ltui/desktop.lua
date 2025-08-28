@@ -25,7 +25,8 @@ local view   = require("ltui/view")
 local panel  = require("ltui/panel")
 local curses = require("ltui/curses")
 
--- define module
+---@class ltui.desktop : ltui.panel
+---ltui.desktop component
 local desktop = desktop or panel()
 
 -- init desktop
@@ -39,4 +40,5 @@ function desktop:init(name, bounds)
 end
 
 -- return module
+---@type ltui.desktop
 return desktop

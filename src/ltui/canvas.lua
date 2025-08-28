@@ -19,16 +19,31 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.point
 local point  = require("ltui/point")
+---@type ltui.curses
 local curses = require("ltui/curses")
+---@type ltui.object
 local object = require("ltui/object")
 
--- define module
+---@class ltui.canvas.line : ltui.object
+---Canvas line for drawing operations
 local line   = line or object()
+
+---@class ltui.canvas : ltui.object
+---@field _view ltui.view Associated view
+---@field _window any Window object
+---@field _x integer Current x position
+---@field _y integer Current y position
+---Canvas for drawing operations on terminal
 local canvas = canvas or object()
 
 -- new canvas instance
+---@param view ltui.view Associated view
+---@param window any Window object
+---@return ltui.canvas New canvas instance
 function canvas:new(view, window)
 
     -- create instance
@@ -154,4 +169,5 @@ function canvas:attr(attrs, modify)
 end
 
 -- return module
+---@type ltui.canvas
 return canvas

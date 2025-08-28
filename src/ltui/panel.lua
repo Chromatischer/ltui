@@ -19,16 +19,25 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.view
 local view   = require("ltui/view")
+---@type ltui.rect
 local rect   = require("ltui/rect")
+---@type ltui.event
 local event  = require("ltui/event")
+---@type ltui.point
 local point  = require("ltui/point")
+---@type ltui.curses
 local curses = require("ltui/curses")
+---@type ltui.base.list
 local list   = require("ltui/base/list")
+---@type ltui.action
 local action = require("ltui/action")
 
--- define module
+---@class ltui.panel : ltui.view
+---Panel component that extends view with child view management
 local panel = panel or view()
 
 -- init panel
@@ -428,4 +437,5 @@ end
 
 
 -- return module
+---@type ltui.panel
 return panel

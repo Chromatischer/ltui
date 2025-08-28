@@ -19,20 +19,35 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.rect
 local rect   = require("ltui/rect")
+---@type ltui.view
 local view   = require("ltui/view")
+---@type ltui.label
 local label  = require("ltui/label")
+---@type ltui.panel
 local panel  = require("ltui/panel")
+---@type ltui.event
 local event  = require("ltui/event")
+---@type ltui.border
 local border = require("ltui/border")
+---@type ltui.curses
 local curses = require("ltui/curses")
+---@type ltui.action
 local action = require("ltui/action")
 
--- define module
+---@class ltui.window : ltui.panel
+---@field _TITLE? string Window title
+---Window component that extends panel with border and title
 local window = window or panel()
 
 -- init window
+---@param name string Window name
+---@param bounds ltui.rect Window bounds
+---@param title? string Window title
+---@param shadow? boolean Whether to show shadow
 function window:init(name, bounds, title, shadow)
 
     -- init panel
@@ -138,4 +153,5 @@ function window:on_resize()
 end
 
 -- return module
+---@type ltui.window
 return window

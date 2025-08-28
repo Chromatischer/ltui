@@ -29,7 +29,8 @@ local scrollbar   = require("ltui/scrollbar")
 local choicebox   = require("ltui/choicebox")
 local boxdialog   = require("ltui/boxdialog")
 
--- define module
+---@class ltui.choicedialog : ltui.boxdialog
+---ltui.choicedialog component
 local choicedialog = choicedialog or boxdialog()
 
 -- init dialog
@@ -127,4 +128,5 @@ function choicedialog:on_event(e)
 end
 
 -- return module
+---@type ltui.choicedialog
 return choicedialog

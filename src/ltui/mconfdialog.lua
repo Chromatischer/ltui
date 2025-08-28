@@ -33,6 +33,8 @@ local textdialog   = require("ltui/textdialog")
 local inputdialog  = require("ltui/inputdialog")
 local choicedialog = require("ltui/choicedialog")
 
+---@class ltui.mconfdialog : ltui.window
+---mconfdialog component
 -- define module
 local mconfdialog = mconfdialog or boxdialog()
 
@@ -414,4 +416,5 @@ function mconfdialog:on_resize()
 end
 
 -- return module
+---@type ltui.mconfdialog
 return mconfdialog

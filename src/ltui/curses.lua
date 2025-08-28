@@ -20,10 +20,25 @@
 
 -- load modules
 local curses = require("ltui.lcurses")
+---@type ltui.base.os
 local os     = require("ltui/base/os")
+---@type ltui.base.log
 local log    = require("ltui/base/log")
 
+---@class ltui.curses
+---Curses terminal interface wrapper with color and window management
+---@field COLOR_BLACK integer
+---@field COLOR_RED integer
+---@field COLOR_GREEN integer
+---@field COLOR_YELLOW integer
+---@field COLOR_BLUE integer
+---@field COLOR_MAGENTA integer
+---@field COLOR_CYAN integer
+---@field COLOR_WHITE integer
+
 -- get color from the given name
+---@param name string Color name
+---@return integer Color constant
 function curses.color(name)
         if name == 'black' then     return curses.COLOR_BLACK
     elseif name == 'red' then       return curses.COLOR_RED
@@ -212,4 +227,5 @@ function curses.has_mouse()
 end
 
 -- return module: curses
+---@type ltui.curses
 return curses

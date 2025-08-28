@@ -26,6 +26,8 @@ local curses     = require("ltui/curses")
 local window     = require("ltui/window")
 local textdialog = require("ltui/textdialog")
 
+---@class ltui.boxdialog : ltui.dialog
+---boxdialog component
 -- define module
 local boxdialog = boxdialog or textdialog()
 
@@ -99,4 +101,5 @@ function boxdialog:on_resize()
 end
 
 -- return module
+---@type ltui.boxdialog
 return boxdialog

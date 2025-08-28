@@ -29,6 +29,8 @@ local curses    = require("ltui/curses")
 local button    = require("ltui/button")
 local object    = require("ltui/object")
 
+---@class ltui.menuconf : ltui.view
+---menuconf component
 -- define module
 local menuconf = menuconf or panel()
 
@@ -394,4 +396,5 @@ menuconf.choice  = menuconf.choice or config { kind = "choice", default = 1, val
 menuconf.boolean = menuconf.boolean or config { kind = "boolean", default = false }
 
 -- return module
+---@type ltui.menuconf
 return menuconf
