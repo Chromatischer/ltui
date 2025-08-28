@@ -18,13 +18,25 @@
 -- @file        path.lua
 --
 
--- define module: path
-local path = path or {}
-
 -- load modules
+---@type ltui.base.string
 local string = require("ltui/base/string")
 
+---@class ltui.base.path
+---@field directory fun(p: string): string
+---@field filename fun(p: string): string
+---@field basename fun(p: string): string
+---@field extension fun(p: string): string
+---@field join fun(p: string, ...): string
+---@field split fun(p: string): string[]
+---@field seperator fun(): string
+---@field islastsep fun(p: string): boolean
+---@field pattern fun(pattern: string): string
+local path = path or {}
+
 -- get the directory of the path
+---@param p string Path to get directory from
+---@return string Directory path or "." if no directory
 function path.directory(p)
     local i = p:find_last("[/\\]")
     if i then
@@ -36,6 +48,8 @@ function path.directory(p)
 end
 
 -- get the filename of the path
+---@param p string Path to get filename from
+---@return string Filename portion of path
 function path.filename(p)
     local i = p:find_last("[/\\]")
     if i then
@@ -46,6 +60,8 @@ function path.filename(p)
 end
 
 -- get the basename of the path
+---@param p string Path to get basename from
+---@return string Basename without extension
 function path.basename(p)
     local name = path.filename(p)
     local i = name:find_last(".", true)
@@ -57,6 +73,8 @@ function path.basename(p)
 end
 
 -- get the file extension of the path: .xxx
+---@param p string Path to get extension from
+---@return string File extension (including dot) or empty string
 function path.extension(p)
 
     -- check
@@ -72,6 +90,9 @@ function path.extension(p)
 end
 
 -- join path
+---@param p string Base path
+---@vararg string Path components to join
+---@return string Joined and translated path
 function path.join(p, ...)
 
     -- check
@@ -87,22 +108,29 @@ function path.join(p, ...)
 end
 
 -- split path by the separator
+---@param p string Path to split
+---@return string[] Array of path components
 function path.split(p)
     return p:split("/\\")
 end
 
 -- get the path seperator
+---@return string Path separator for current OS
 function path.seperator()
     return xmake._HOST == "windows" and '\\' or '/'
 end
 
 -- the last character is the path seperator?
+---@param p string Path to check
+---@return boolean True if path ends with separator
 function path.islastsep(p)
     local sep = p:sub(#p, #p)
     return xmake._HOST == "windows" and (sep == '\\' or sep == '/') or (sep == '/')
 end
 
 -- convert path pattern to a lua pattern
+---@param pattern string Glob pattern to convert
+---@return string Lua pattern for matching
 function path.pattern(pattern)
 
     -- translate wildcards, .e.g *, **
@@ -120,4 +148,5 @@ function path.pattern(pattern)
 end
 
 -- return module: path
+---@type ltui.base.path
 return path

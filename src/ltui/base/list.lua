@@ -19,12 +19,17 @@
 --
 
 -- load modules
+---@type ltui.object
 local object = require("ltui/object")
 
--- define module
+---@class ltui.base.list : ltui.object
+---@field _length integer Current size of the list
+---@field _first table? First item in the list
+---@field _last table? Last item in the list
 local list = list or object { _init = {"_length"} } {0}
 
 -- clear list
+---Clear all items from the list
 function list:clear()
     self._length = 0
     self._first  = nil
@@ -32,6 +37,8 @@ function list:clear()
 end
 
 -- insert item after the given item
+---@param t table Item to insert
+---@param after? table Item to insert after (nil for last position)
 function list:insert(t, after)
     if not after then
         return self:insert_last(t)
@@ -49,6 +56,7 @@ function list:insert(t, after)
 end
 
 -- insert the first item in head
+---@param t table Item to insert at beginning
 function list:insert_first(t)
     if self._first then
         self._first._prev = t
@@ -62,6 +70,7 @@ function list:insert_first(t)
 end
 
 -- insert the last item in tail
+---@param t table Item to insert at end
 function list:insert_last(t)
     if self._last then
         self._last._next = t
@@ -75,6 +84,8 @@ function list:insert_last(t)
 end
 
 -- remove item
+---@param t table Item to remove
+---@return table The removed item
 function list:remove(t)
     if t._next then
         if t._prev then
@@ -101,6 +112,7 @@ function list:remove(t)
 end
 
 -- remove the first item
+---@return table? The removed item or nil if empty
 function list:remove_first()
     if not self._first then
         return
@@ -119,6 +131,7 @@ function list:remove_first()
 end
 
 -- remove last item
+---@return table? The removed item or nil if empty
 function list:remove_last()
     if not self._last then
         return
@@ -137,36 +150,44 @@ function list:remove_last()
 end
 
 -- push item to tail
+---@param t table Item to push
 function list:push(t)
     self:insert_last(t)
 end
 
 -- pop item from tail
+---@return table? The popped item
 function list:pop()
     self:remove_last()
 end
 
 -- shift item: 1 2 3 <- 2 3
+---@return table? The shifted item
 function list:shift()
     self:remove_first()
 end
 
 -- unshift item: 1 2 -> t 1 2
+---@param t table Item to unshift
 function list:unshift(t)
     self:insert_first(t)
 end
 
 -- get first item
+---@return table? First item or nil if empty
 function list:first()
     return self._first
 end
 
 -- get last item
+---@return table? Last item or nil if empty
 function list:last()
     return self._last
 end
 
 -- get next item
+---@param last? table Previous item (nil for first)
+---@return table? Next item or nil if at end
 function list:next(last)
     if last then
         return last._next
@@ -176,6 +197,8 @@ function list:next(last)
 end
 
 -- get the previous item
+---@param last? table Next item (nil for last)
+---@return table? Previous item or nil if at beginning
 function list:prev(last)
     if last then
         return last._prev
@@ -185,11 +208,13 @@ function list:prev(last)
 end
 
 -- get list size
+---@return integer Number of items in list
 function list:size()
     return self._length
 end
 
 -- is empty?
+---@return boolean True if list is empty
 function list:empty()
     return self:size() == 0
 end
@@ -202,6 +227,7 @@ end
 --     print(item)
 -- end
 --
+---@return fun(): table? Iterator function for forward traversal
 function list:items()
     local iter = function (list, item)
         return list:next(item)
@@ -210,6 +236,7 @@ function list:items()
 end
 
 -- get reverse items
+---@return fun(): table? Iterator function for reverse traversal
 function list:ritems()
     local iter = function (list, item)
         return list:prev(item)
@@ -218,9 +245,11 @@ function list:ritems()
 end
 
 -- new list
+---@return ltui.base.list New empty list
 function list.new()
     return list()
 end
 
 -- return module: list
+---@type ltui.base.list
 return list

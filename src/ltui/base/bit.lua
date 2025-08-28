@@ -18,23 +18,36 @@
 -- @file        bit.lua
 --
 
--- define module: bit
+---@class ltui.base.bit
+---@field band fun(a: integer, b: integer): integer
+---@field bor fun(a: integer, b: integer): integer
+---@field bxor fun(a: integer, b: integer): integer
 local bit = bit or {}
 
 -- bit/and operation
+---@param a integer First operand
+---@param b integer Second operand
+---@return integer Bitwise AND result
 function bit.band(a, b)
     return a & b
 end
 
 -- bit/or operation
+---@param a integer First operand
+---@param b integer Second operand
+---@return integer Bitwise OR result
 function bit.bor(a, b)
     return a | b
 end
 
 -- bit/xor operation
+---@param a integer First operand
+---@param b integer Second operand
+---@return integer Bitwise XOR result
 function bit.bxor(a, b)
     return a ~ b
 end
 
 -- load bit module
+---@type ltui.base.bit
 return bit

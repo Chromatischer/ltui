@@ -18,13 +18,24 @@
 -- @file        os.lua
 --
 
--- define module
-local os = os or {}
-
 -- load modules
+---@type ltui.base.string
 local string = require("ltui/base/string")
 
+---@class ltui.base.os
+---@field _HOST? string Cached host OS name
+---@field isfile fun(filepath: string?): boolean
+---@field raise fun(msg?: string, ...): nil
+---@field run fun(cmd: string, ...): boolean|integer
+---@field iorun fun(cmd: string, ...): string?
+---@field host fun(): string?
+---@field pbpaste fun(): string?
+---@field pbcopy fun(data: string): nil
+local os = os or {}
+
 -- is file?
+---@param filepath string? Path to check
+---@return boolean True if file exists and is readable
 function os.isfile(filepath)
     local file = filepath and io.open(filepath, 'r') or nil
     if file then
@@ -37,6 +48,8 @@ end
 --
 -- the parent function will capture it if we uses pcall or xpcall
 --
+---@param msg? string Error message format string
+---@vararg any Arguments for format string
 function os.raise(msg, ...)
 
     -- raise it
@@ -48,11 +61,17 @@ function os.raise(msg, ...)
 end
 
 -- run program
+---@param cmd string Command format string
+---@vararg any Arguments for format string  
+---@return boolean|integer Exit code or success status
 function os.run(cmd, ...)
     return os.execute(string.tryformat(cmd, ...))
 end
 
 -- run program and get io output
+---@param cmd string Command format string
+---@vararg any Arguments for format string
+---@return string? Command output or nil if failed
 function os.iorun(cmd, ...)
     local outs = nil
     local file = io.popen(string.tryformat(cmd, ...), "r")
@@ -64,6 +83,7 @@ function os.iorun(cmd, ...)
 end
 
 -- get host name
+---@return string? Host OS name ("macosx", "windows", "linux") or nil if unknown
 function os.host()
     if os._HOST == nil then
         if jit and jit.os then
@@ -86,6 +106,7 @@ function os.host()
 end
 
 -- read string data from pasteboard
+---@return string? Clipboard content or nil if failed
 function os.pbpaste()
     if os.host() == "macosx" then
         return os.iorun("pbpaste")
@@ -97,6 +118,7 @@ function os.pbpaste()
 end
 
 -- copy string data to pasteboard
+---@param data string Data to copy to clipboard
 function os.pbcopy(data)
     if os.host() == "macosx" then
         os.run("bash -c \"echo '" .. data .. "' | pbcopy\"")
@@ -108,4 +130,5 @@ function os.pbcopy(data)
 end
 
 -- return module
+---@type ltui.base.os
 return os
