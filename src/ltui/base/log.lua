@@ -18,7 +18,9 @@
 -- @file        log.lua
 --
 
--- define module: log
+---@class ltui.base.log
+---@field _ENABLE boolean Log enabled state
+---@field _FILE file|false Log file handle
 local log = log or {}
 
 -- get the log file

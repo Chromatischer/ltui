@@ -1,0 +1,29 @@
+{
+    "$schema": "https://raw.githubusercontent.com/LuaLS/lua-language-server/master/locale/en-us/setting.lua",
+    "Lua.runtime.version": "Lua 5.3",
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "src/?.lua",
+        "src/?/init.lua"
+    ],
+    "Lua.workspace.library": [
+        "src"
+    ],
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.diagnostics.globals": [
+        "curses",
+        "bit32"
+    ],
+    "Lua.hint.enable": true,
+    "Lua.hint.setType": true,
+    "Lua.hint.paramType": true,
+    "Lua.hint.paramName": "All",
+    "Lua.hint.semicolon": "SameLine",
+    "Lua.hint.arrayIndex": "Auto",
+    "Lua.completion.callSnippet": "Both",
+    "Lua.completion.keywordSnippet": "Both",
+    "Lua.completion.displayContext": 5,
+    "Lua.format.enable": true,
+    "Lua.telemetry.enable": false
+}

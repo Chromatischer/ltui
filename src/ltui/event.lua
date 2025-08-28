@@ -19,13 +19,35 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log    = require("ltui/base/log")
+---@type ltui.object
 local object = require("ltui/object")
 
--- define module
+---@class ltui.event : ltui.object
+---@field type number Event type (ev_keyboard, ev_mouse, etc.)
+---@field command? string Command name for command events
+---@field extra? any Extra data for events
+---@field _init string[] Field initialization order: {"type", "command", "extra"}
+---
+---Event type constants:
+---@field ev_keyboard number Keyboard event type (1)
+---@field ev_mouse number Mouse event type (2)  
+---@field ev_command number Command event type (3)
+---@field ev_text number Text event type (4)
+---@field ev_idle number Idle event type (5)
+---@field ev_max number Maximum event type value (5)
+---
+---Command type constants:
+---@field cm_quit string Quit command
+---@field cm_exit string Exit command  
+---@field cm_enter string Enter command
+---@field cm_max number Maximum command type value
 local event = event or object { _init = {"type", "command", "extra"} }
 
--- register event types
+---Register event types as enumerated constants
+---@param tag string Base name for the max value (e.g., "ev_max")
+---@param ... string List of event type names to register
 function event:register(tag, ...)
     local base = self[tag] or 0
     local enums = {...}
@@ -36,17 +58,21 @@ function event:register(tag, ...)
     self[tag] = base + n
 end
 
--- is key?
+---Check if this is a keyboard event with specific key
+---@param key_name string Key name to check for  
+---@return boolean True if this is the specified keyboard event
 function event:is_key(key_name)
     return self.type == event.ev_keyboard and self.key_name == key_name
 end
 
--- is command event: cm_xxx?
+---Check if this is a command event with specific command
+---@param command string Command name to check for (e.g., "cm_quit")
+---@return boolean True if this is the specified command event  
 function event:is_command(command)
     return self.type == event.ev_command and self.command == command
 end
 
--- dump event
+---Debug print event information  
 function event:dump()
     if self.type == event.ev_keyboard then
         log:print("event(key): %s %s ..", self.key_name, self.key_code)
@@ -57,33 +83,36 @@ function event:dump()
     end
 end
 
--- register event types, event.ev_keyboard = 1, event.ev_mouse = 2, ... , event.ev_idle = 5, event.ev_max = 5
+-- Register event types, event.ev_keyboard = 1, event.ev_mouse = 2, ... , event.ev_idle = 5, event.ev_max = 5
 event:register("ev_max", "ev_keyboard", "ev_mouse", "ev_command", "ev_text", "ev_idle")
 
--- register command event types (ev_command)
+-- Register command event types (ev_command)
 event:register("cm_max", "cm_quit", "cm_exit", "cm_enter")
 
--- define keyboard event
---
--- keyname = key name
--- keycode = key code
--- keymeta = ALT key was pressed
---
+---@class ltui.event.keyboard : ltui.event
+---@field key_code number Key code value
+---@field key_name string Key name (e.g., "Enter", "Escape")  
+---@field key_meta boolean True if ALT key was pressed
+---@field type number Event type (ev_keyboard)
 event.keyboard = object {_init = { "key_code", "key_name", "key_meta" }, type = event.ev_keyboard}
 
--- define mouse event
---
--- btn_name = button number and event type
--- btn_code = mouse event code
--- x, y = coordinates
---
+---@class ltui.event.mouse : ltui.event
+---@field btn_code number Mouse event code
+---@field x number Mouse X coordinate
+---@field y number Mouse Y coordinate
+---@field btn_name string Button name and event type
+---@field type number Event type (ev_mouse)
 event.mouse = object {_init = { "btn_code", "x", "y", "btn_name" }, type = event.ev_mouse}
 
--- define command event
+---@class ltui.event.command : ltui.event
+---@field command string Command name (e.g., "cm_quit")
+---@field extra? any Extra command data
+---@field type number Event type (ev_command)
 event.command = object {_init = { "command", "extra" }, type = event.ev_command}
 
--- define idle event
+---@class ltui.event.idle : ltui.event
+---@field type number Event type (ev_idle)
 event.idle = object {_init = {}, type = event.ev_idle}
 
--- return module
+---@type ltui.event
 return event
