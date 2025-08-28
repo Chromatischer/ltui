@@ -19,28 +19,43 @@
 --
 
 -- load modules
+---@type ltui.point
 local point  = require("ltui/point")
+---@type ltui.object
 local object = require("ltui/object")
 
--- define module
+---@class ltui.rect : ltui.object
+---@field sx number Start X coordinate (left edge)
+---@field sy number Start Y coordinate (top edge)  
+---@field ex number End X coordinate (right edge)
+---@field ey number End Y coordinate (bottom edge)
+---@field _init string[] Field initialization order: {"sx", "sy", "ex", "ey"}
 local rect = rect or object { _init = {"sx", "sy", "ex", "ey"} }
 
--- make rect
+---Create a new rect from position and size
+---@param x number X position
+---@param y number Y position  
+---@param w number Width
+---@param h number Height
+---@return ltui.rect New rectangle
 function rect:new(x, y, w, h)
     return rect { x, y, x + w, y + h }
 end
 
--- get rect size
+---Get rect size as a point
+---@return ltui.point Point with width and height
 function rect:size()
     return point { self.ex - self.sx, self.ey - self.sy }
 end
 
--- get width
+---Get rect width
+---@return number Width of rectangle
 function rect:width()
     return self.ex - self.sx
 end
 
--- get height
+---Get rect height
+---@return number Height of rectangle
 function rect:height()
     return self.ey - self.sy
 end
@@ -136,12 +151,16 @@ function rect:__eq(r)
         self.ey == r.ey
 end
 
--- contains the given point in rect?
+---Check if point is contained within rect
+---@param x number X coordinate
+---@param y number Y coordinate
+---@return boolean True if point is inside rectangle
 function rect:contains(x, y)
     return x >= self.sx and x < self.ex and y >= self.sy and y < self.ey
 end
 
--- empty rect?
+---Check if rectangle is empty
+---@return boolean True if rectangle has zero or negative area
 function rect:empty()
     return self.sx >= self.ex or self.sy >= self.ey
 end
@@ -165,5 +184,5 @@ function rect.__concat(op1, op2)
     end
 end
 
--- return module
+---@type ltui.rect
 return rect

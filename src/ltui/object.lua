@@ -18,7 +18,8 @@
 -- @file        object.lua
 --
 
--- define module: object
+---@class ltui.object
+---@field _init string[] List of field names for constructor initialization
 local object = object or {}
 
 -- taken from 'std' library: http://luaforge.net/projects/stdlib/
@@ -30,7 +31,10 @@ local object = object or {}
 --  > p1 {x = 1, y = 2}
 --
 
--- permute some indices of a table
+---Permute some indices of a table
+---@param p table Field mapping table
+---@param t table Input table to permute
+---@return table Permuted table
 local function permute (p, t)
     local u = {}
     for i, v in pairs (t) do
@@ -43,7 +47,9 @@ local function permute (p, t)
     return u
 end
 
--- make a shallow copy of a table, including any
+---Make a shallow copy of a table, including metatable
+---@param t table Table to clone
+---@return table Cloned table
 local function clone (t)
     local u = setmetatable ({}, getmetatable (t))
     for i, v in pairs (t) do
@@ -52,11 +58,14 @@ local function clone (t)
     return u
 end
 
--- merge two tables
---
--- If there are duplicate fields, u's will be used. The metatable of
--- the returned table is that of t
---
+---Merge two tables
+---
+---If there are duplicate fields, u's values will be used. The metatable of
+---the returned table is that of t
+---
+---@param t table Base table
+---@param u table Table to merge into base
+---@return table Merged table
 local function merge (t, u)
     local r = clone (t)
     for i, v in pairs (u) do
@@ -65,31 +74,38 @@ local function merge (t, u)
     return r
 end
 
--- root object
---
--- List of fields to be initialised by the
--- constructor: assuming the default _clone, the
--- numbered values in an object constructor are
--- assigned to the fields given in _init
---
+---Root object constructor
+---
+---Object constructor that creates new instances by cloning the prototype
+---and initializing fields based on the _init table.
+---
+---List of fields to be initialised by the constructor: assuming the default _clone, 
+---the numbered values in an object constructor are assigned to the fields given in _init
+---
+---@class ltui.object
+---@field _init string[] List of field names for constructor initialization
 local object = { _init = {} }
 setmetatable (object, object)
 
--- object constructor
---
--- @param initial values for fields in
---
--- @return new object
---
+---Object constructor method
+---
+---Creates a new object instance by merging the prototype with initial values
+---
+---@param values? table Initial values for fields (indexed by number or field name)
+---@return ltui.object New object instance
 function object:_clone (values)
     local object = merge(self, permute(self._init, values or {}))
     return setmetatable (object, object)
 end
 
--- local x = object {}
+---Metamethod to allow calling object as constructor
+---
+---Usage: local x = object {}
+---@param ... any Constructor arguments
+---@return ltui.object New object instance
 function object.__call (...)
   return (...)._clone (...)
 end
 
--- return module: object
+---@type ltui.object
 return object
