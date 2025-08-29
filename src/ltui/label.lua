@@ -16,6 +16,7 @@
 --
 -- @author      ruki
 -- @file        label.lua
+-- @brief       Label component for displaying text in a view.
 --
 
 -- load modules
@@ -34,15 +35,30 @@ if not luajit then
     bit = require("ltui/base/bit")
 end
 
+--- Label view for rendering a single or multi-line string.
+--
+-- The label supports:
+-- - Setting text content via text_set
+-- - Styling through textattr_set (e.g. "yellow onblue bold")
+-- - Automatic width-aware splitting of multi-byte strings (using wcwidth)
+-- - Background inheritance from parent views when no explicit text background is set
+-- - Action hook ac_on_text_changed when the text changes
+--
+-- Example:
+-- ```lua
+-- local label = require("ltui/label"):new("greeting", ltui.rect{0, 0, 20, 1})
+-- label:text_set("Hello, world!")
+-- label:textattr_set("yellow onblue bold")
+-- ```
 ---@class ltui.label : ltui.view
----@field _TEXT? string Label text content
----Label component for displaying text
+---@field _TEXT? string Internal text content of the label
+---@field _TEXTATTR table<string, integer>|nil Cache of computed curses attributes by spec string
 local label = label or view()
 
--- init label
+--- Initialize label.
 ---@param name string Label name
----@param bounds ltui.rect Label bounds
----@param text? string Label text
+---@param bounds ltui.rect Label bounds (position and size)
+---@param text? string Optional initial text content
 function label:init(name, bounds, text)
 
     -- init view
@@ -55,7 +71,8 @@ function label:init(name, bounds, text)
     self:textattr_set("black")
 end
 
--- draw view
+--- Draw the label onto its canvas.
+---@param transparent boolean If true, do not draw the background
 function label:on_draw(transparent)
 
     -- draw background
@@ -71,12 +88,17 @@ function label:on_draw(transparent)
     end
 end
 
--- get text
+--- Get the label text.
+---@return string text Current text content (empty string if unset)
 function label:text()
-    return self._TEXT
+    return self._TEXT or ""
 end
 
--- set text
+--- Set the label text.
+-- Triggers action ac_on_text_changed if the content actually changed, and
+-- invalidates the view for redraw.
+---@param text? string New text content (defaults to empty string)
+---@return ltui.label self
 function label:text_set(text)
 
     -- set text
@@ -92,17 +114,26 @@ function label:text_set(text)
     return self
 end
 
--- get text attribute
+--- Get the label text attribute specification string.
+-- Example: "yellow onblue bold"
+---@return string|nil attr Text attribute spec or nil if unset
 function label:textattr()
     return self:attr("textattr")
 end
 
--- set text attribute, .e.g textattr_set("yellow onblue bold")
+--- Set the label text attribute specification string.
+-- When no explicit background is included (no "on..."), the view background
+-- is inherited when drawing.
+---@param attr string Attribute specification (e.g. "yellow onblue bold")
+---@return ltui.label self
 function label:textattr_set(attr)
     return self:attr_set("textattr", attr)
 end
 
--- get the current text attribute value
+--- Compute the current curses attribute value for the text.
+-- This uses an internal cache to avoid re-calculating the attribute for the same
+-- attribute specification string.
+---@return integer|nil value Computed curses attribute value or nil if no spec
 function label:textattr_val()
 
     -- get text attribute
@@ -129,7 +160,13 @@ function label:textattr_val()
     return value
 end
 
--- split text by width
+--- Split text into lines that fit within the provided width.
+-- - Respects newlines in the input text
+-- - Handles UTF-8 multi-byte sequences and uses wcwidth for display width
+--
+---@param text string Input text
+---@param width? integer Optional maximum line width (defaults to view:width())
+---@return string[] lines Array of lines fitting within width
 function label:splitext(text, width)
 
     -- get width

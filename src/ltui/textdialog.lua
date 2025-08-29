@@ -19,21 +19,35 @@
 --
 
 -- load modules
+---@type ltui.base.log
 local log       = require("ltui/base/log")
+---@type ltui.rect
 local rect      = require("ltui/rect")
+---@type ltui.event
 local event     = require("ltui/event")
+---@type ltui.dialog
 local dialog    = require("ltui/dialog")
+---@type ltui.curses
 local curses    = require("ltui/curses")
+---@type ltui.textarea
 local textarea  = require("ltui/textarea")
+---@type ltui.scrollbar
 local scrollbar = require("ltui/scrollbar")
+---@type ltui.action
 local action    = require("ltui/action")
 
----@class ltui.textdialog : ltui.boxdialog
----textdialog component
+---@class ltui.textdialog : ltui.dialog
+---@field private _TEXT ltui.textarea|nil Internal lazily-created text area used to render content.
+---@field private _SCROLLBAR ltui.scrollbar|nil Internal scrollbar; only visible when scrollable and content overflows.
+--- Text dialog component. Provides a read-only textarea with optional vertical scrollbar.
 -- define module
 local textdialog = textdialog or dialog()
 
 -- init dialog
+---@param name string Unique identifier for this dialog instance
+---@param bounds ltui.rect Initial bounds for the dialog (position and size)
+---@param title string|nil Optional title text displayed in the frame
+---@return nil
 function textdialog:init(name, bounds, title)
 
     -- init window
@@ -81,6 +95,9 @@ function textdialog:init(name, bounds, title)
 end
 
 -- enable or disable scrollbar
+---@param name string Option name. Currently supports "scrollable" (boolean) to toggle vertical scrollbar.
+---@param value any Option value; when name == "scrollable" expects boolean.
+---@return nil
 function textdialog:option_set(name, value)
     if name == "scrollable" then
         local oldvalue = self:option(name)
@@ -96,6 +113,7 @@ function textdialog:option_set(name, value)
 end
 
 -- get text
+---@return ltui.textarea Lazily-created textarea used to display the dialog's text content.
 function textdialog:text()
     if not self._TEXT then
         self._TEXT = textarea:new("textdialog.text", rect:new(0, 0, self:panel():width(), self:panel():height() - 1))
@@ -104,6 +122,7 @@ function textdialog:text()
 end
 
 -- get scrollbar
+---@return ltui.scrollbar Lazily-created vertical scrollbar bound to the textarea's scroll progress.
 function textdialog:scrollbar()
     if not self._SCROLLBAR then
         self._SCROLLBAR = scrollbar:new("textdialog.scrollbar", rect:new(self:panel():width() - 1, 0, 1, self:panel():height() - 1))
@@ -113,6 +132,8 @@ function textdialog:scrollbar()
 end
 
 -- on event
+---@param e ltui.event Event object from ltui/event
+---@return boolean|nil True if the event was handled; otherwise nil/false to propagate
 function textdialog:on_event(e)
 
     -- pass event to dialog

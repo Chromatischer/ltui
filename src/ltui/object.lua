@@ -20,7 +20,8 @@
 
 ---@class ltui.object
 ---@field _init string[] List of field names for constructor initialization
-local object = object or {}
+local object = { _init = {} }
+setmetatable (object, object)
 
 -- taken from 'std' library: http://luaforge.net/projects/stdlib/
 -- and http://lua-cui.sourceforge.net/
@@ -79,20 +80,13 @@ end
 ---Object constructor that creates new instances by cloning the prototype
 ---and initializing fields based on the _init table.
 ---
----List of fields to be initialised by the constructor: assuming the default _clone, 
+---List of fields to be initialised by the constructor: assuming the default _clone,
 ---the numbered values in an object constructor are assigned to the fields given in _init
 ---
----@class ltui.object
----@field _init string[] List of field names for constructor initialization
-local object = { _init = {} }
-setmetatable (object, object)
-
----Object constructor method
----
----Creates a new object instance by merging the prototype with initial values
----
+---@generic T
+---@param self T
 ---@param values? table Initial values for fields (indexed by number or field name)
----@return ltui.object New object instance
+---@return T New object instance
 function object:_clone (values)
     local object = merge(self, permute(self._init, values or {}))
     return setmetatable (object, object)
@@ -101,8 +95,10 @@ end
 ---Metamethod to allow calling object as constructor
 ---
 ---Usage: local x = object {}
+---@generic T
+---@param self T
 ---@param ... any Constructor arguments
----@return ltui.object New object instance
+---@return T New object instance
 function object.__call (...)
   return (...)._clone (...)
 end

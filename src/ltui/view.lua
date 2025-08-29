@@ -51,10 +51,12 @@ local action = require("ltui/action")
 local view = view or object()
 
 ---Create a new view instance
+---@generic T : ltui.view
+---@param self T
 ---@param name string View name
----@param bounds ltui.rect View bounds  
+---@param bounds ltui.rect View bounds
 ---@param ... any Additional constructor arguments
----@return ltui.view New view instance
+---@return T New view instance
 function view:new(name, bounds, ...)
 
     -- create instance

@@ -19,14 +19,14 @@
 --
 
 -- load modules
-local log        = require("ltui/base/log")
-local rect       = require("ltui/rect")
-local view       = require("ltui/view")
-local event      = require("ltui/event")
-local action     = require("ltui/action")
-local curses     = require("ltui/curses")
-local window     = require("ltui/window")
-local textedit   = require("ltui/textedit")
+local log = require("ltui/base/log")
+local rect = require("ltui/rect")
+local view = require("ltui/view")
+local event = require("ltui/event")
+local action = require("ltui/action")
+local curses = require("ltui/curses")
+local window = require("ltui/window")
+local textedit = require("ltui/textedit")
 local textdialog = require("ltui/textdialog")
 
 ---@class ltui.inputdialog : ltui.textdialog
@@ -35,43 +35,44 @@ local inputdialog = inputdialog or textdialog()
 
 -- init dialog
 function inputdialog:init(name, bounds, title)
+	-- init window
+	textdialog.init(self, name, bounds, title)
 
-    -- init window
-    textdialog.init(self, name, bounds, title)
+	-- insert textedit
+	self:panel():insert(self:textedit())
 
-    -- insert textedit
-    self:panel():insert(self:textedit())
+	-- resize text
+	self:text():bounds().ey = 1
+	self:text():invalidate(true)
+	self:text():option_set("selectable", false)
 
-    -- resize text
-    self:text():bounds().ey = 1
-    self:text():invalidate(true)
-    self:text():option_set("selectable", false)
+	-- text changed
+	self:text():action_set(action.ac_on_text_changed, function(v)
+		if v:text() then
+			local lines = #self:text():splitext(v:text()) + 1
+			if lines > 0 and lines < self:height() then
+				self:text():bounds().ey = lines
+				self:textedit():bounds().sy = lines
+				self:text():invalidate(true)
+				self:textedit():invalidate(true)
+			end
+		end
+	end)
 
-    -- text changed
-    self:text():action_set(action.ac_on_text_changed, function (v)
-        if v:text() then
-            local lines = #self:text():splitext(v:text()) + 1
-            if lines > 0 and lines < self:height() then
-                self:text():bounds().ey = lines
-                self:textedit():bounds().sy = lines
-                self:text():invalidate(true)
-                self:textedit():invalidate(true)
-            end
-        end
-    end)
-
-    -- on resize for panel
-    self:panel():action_add(action.ac_on_resized, function (v)
-        self:textedit():bounds_set(rect{0, 1, v:width(), v:height() - 1})
-    end)
+	-- on resize for panel
+	self:panel():action_add(action.ac_on_resized, function(v)
+		self:textedit():bounds_set(rect({ 0, 1, v:width(), v:height() - 1 }))
+	end)
 end
 
 -- get textedit
+---@return ltui.textedit
 function inputdialog:textedit()
-    if not self._TEXTEDIT then
-        self._TEXTEDIT = textedit:new("inputdialog.textedit", rect{0, 1, self:panel():width(), self:panel():height() - 1})
-    end
-    return self._TEXTEDIT
+	if not self._TEXTEDIT then
+		self._TEXTEDIT =
+			textedit:new("inputdialog.textedit", rect({ 0, 1, self:panel():width(), self:panel():height() - 1 }))
+	end
+	return self._TEXTEDIT
 end
 
 -- return module

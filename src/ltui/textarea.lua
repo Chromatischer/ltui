@@ -26,7 +26,7 @@ local event     = require("ltui/event")
 local curses    = require("ltui/curses")
 local action    = require("ltui/action")
 
----@class ltui.textarea : ltui.view
+---@class ltui.textarea : ltui.label
 ---textarea component
 -- define module
 local textarea = textarea or label()
