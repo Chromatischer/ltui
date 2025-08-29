@@ -63,11 +63,9 @@ ltui.choicedialog = require("ltui/choicedialog")
 ltui.curses = require("ltui/curses")
 ltui.desktop = require("ltui/desktop")
 ltui.dialog = require("ltui/dialog")
-ltui.drawable = {
-	canvas = require("ltui/drawable/canvas"),
-	drawtool = require("ltui/drawable/drawtool"),
-	linedraw = require("ltui/drawable/linedraw"),
-}
+ltui.drawable.canvas = require("ltui/drawable/canvas")
+ltui.drawable.drawtool = require("ltui/drawable/drawtool")
+ltui.drawable.linedraw = require("ltui/drawable/linedraw")
 ltui.event = require("ltui/event")
 ltui.inputdialog = require("ltui/inputdialog")
 ltui.label = require("ltui/label")
