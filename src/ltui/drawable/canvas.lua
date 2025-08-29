@@ -235,7 +235,8 @@ function drawable_canvas:on_draw(transparent)
             for x = 1, width do
                 local pixel = self._drawing_buffer[y][x]
                 if pixel then
-                    canvas:move(x - 1, y - 1)  -- canvas uses 0-based coordinates
+                    -- canvas uses 0-based coordinates, and move takes (x, y) 
+                    canvas:move(x - 1, y - 1)
                     if pixel.attr then
                         canvas:attr(pixel.attr)
                     end

@@ -30,6 +30,7 @@
 ---@field curses ltui.curses Curses terminal interface
 ---@field desktop ltui.desktop Desktop/workspace component
 ---@field dialog ltui.dialog Base dialog component
+---@field drawable table Drawable components namespace
 ---@field event ltui.event Event system
 ---@field inputdialog ltui.inputdialog Text input dialog
 ---@field label ltui.label Text label component
@@ -62,6 +63,11 @@ ltui.choicedialog = require("ltui/choicedialog")
 ltui.curses       = require("ltui/curses")
 ltui.desktop      = require("ltui/desktop")
 ltui.dialog       = require("ltui/dialog")
+ltui.drawable     = {
+    canvas    = require("ltui/drawable/canvas"),
+    drawtool  = require("ltui/drawable/drawtool"),
+    linedraw  = require("ltui/drawable/linedraw")
+}
 ltui.event        = require("ltui/event")
 ltui.inputdialog  = require("ltui/inputdialog")
 ltui.label        = require("ltui/label")
