@@ -1,0 +1,9 @@
+function math.round(x)
+    -- Rounds to the nearest integer; halves (.5) round away from zero
+    if x >= 0 then
+        return math.floor(x + 0.5)
+    else
+        return math.ceil(x - 0.5)
+    end
+end
+
