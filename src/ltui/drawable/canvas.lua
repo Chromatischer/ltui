@@ -38,6 +38,8 @@ local canvas_base = require("ltui/canvas")
 local drawable_canvas = drawable_canvas or panel()
 
 -- init drawable canvas
+---@param name string Canvas name
+---@param bounds ltui.rect Canvas bounds
 function drawable_canvas:init(name, bounds)
 	-- init panel
 	panel.init(self, name, bounds)
@@ -57,6 +59,7 @@ function drawable_canvas:init(name, bounds)
 end
 
 -- clear the drawing buffer
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:clear_buffer()
 	local bounds = self:bounds()
 	local width = bounds:width()
@@ -78,6 +81,8 @@ function drawable_canvas:clear_buffer()
 end
 
 -- set background character
+---@param ch? string New background character
+---@return string|ltui.drawable.canvas Returns character if getting, or self if setting
 function drawable_canvas:background_char(ch)
 	if ch then
 		self._background_char = ch
@@ -87,6 +92,11 @@ function drawable_canvas:background_char(ch)
 end
 
 -- set pixel (character) at given coordinates
+---@param x integer X coordinate (1-based)
+---@param y integer Y coordinate (1-based)
+---@param char? string Character to draw
+---@param attr? string|table Optional attributes
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:set_pixel(x, y, char, attr)
 	local bounds = self:bounds()
 	local width = bounds:width()
@@ -113,6 +123,9 @@ function drawable_canvas:set_pixel(x, y, char, attr)
 end
 
 -- get pixel (character) at given coordinates
+---@param x integer X coordinate (1-based)
+---@param y integer Y coordinate (1-based)
+---@return string?, string|table|nil Character and attributes at position
 function drawable_canvas:get_pixel(x, y)
 	local bounds = self:bounds()
 	local width = bounds:width()
@@ -131,6 +144,13 @@ function drawable_canvas:get_pixel(x, y)
 end
 
 -- draw line from (x1,y1) to (x2,y2) using given character
+---@param x1 integer Starting X coordinate
+---@param y1 integer Starting Y coordinate
+---@param x2 integer Ending X coordinate
+---@param y2 integer Ending Y coordinate
+---@param char? string Character to draw with
+---@param attr? string|table Optional attributes
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:draw_line(x1, y1, x2, y2, char, attr)
 	char = char or "*"
 
@@ -165,6 +185,13 @@ function drawable_canvas:draw_line(x1, y1, x2, y2, char, attr)
 end
 
 -- draw rectangle outline
+---@param x integer Starting X coordinate
+---@param y integer Starting Y coordinate
+---@param width integer Rectangle width
+---@param height integer Rectangle height
+---@param char? string Character to draw with
+---@param attr? string|table Optional attributes
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:draw_rect(x, y, width, height, char, attr)
 	char = char or "*"
 
@@ -184,6 +211,13 @@ function drawable_canvas:draw_rect(x, y, width, height, char, attr)
 end
 
 -- fill rectangle
+---@param x integer Starting X coordinate
+---@param y integer Starting Y coordinate
+---@param width integer Rectangle width
+---@param height integer Rectangle height
+---@param char? string Character to fill with
+---@param attr? string|table Optional attributes
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:fill_rect(x, y, width, height, char, attr)
 	char = char or "*"
 
@@ -197,6 +231,11 @@ function drawable_canvas:fill_rect(x, y, width, height, char, attr)
 end
 
 -- draw text at position
+---@param x integer Starting X coordinate
+---@param y integer Y coordinate
+---@param text string Text to draw
+---@param attr? string|table Optional attributes
+---@return ltui.drawable.canvas Self for chaining
 function drawable_canvas:draw_text(x, y, text, attr)
 	for i = 1, #text do
 		local char = text:sub(i, i)
@@ -206,6 +245,7 @@ function drawable_canvas:draw_text(x, y, text, attr)
 end
 
 -- get drawing canvas bounds (inner bounds for drawing)
+---@return ltui.rect Rectangle representing drawable area
 function drawable_canvas:drawing_bounds()
 	local bounds = self:bounds()
 	-- Return bounds adjusted for any borders/padding if needed
@@ -213,6 +253,7 @@ function drawable_canvas:drawing_bounds()
 end
 
 -- on draw - render the drawing buffer to canvas
+---@param transparent? boolean Whether to draw transparently
 function drawable_canvas:on_draw(transparent)
 	-- draw panel background first
 	panel.on_draw(self, transparent)
