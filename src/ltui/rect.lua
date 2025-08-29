@@ -20,135 +20,131 @@
 
 -- load modules
 ---@type ltui.point
-local point  = require("ltui/point")
+local point = require("ltui/point")
 ---@type ltui.object
 local object = require("ltui/object")
 
 ---@class ltui.rect : ltui.object
 ---@field sx number Start X coordinate (left edge)
----@field sy number Start Y coordinate (top edge)  
+---@field sy number Start Y coordinate (top edge)
 ---@field ex number End X coordinate (right edge)
 ---@field ey number End Y coordinate (bottom edge)
 ---@field _init string[] Field initialization order: {"sx", "sy", "ex", "ey"}
-local rect = rect or object { _init = {"sx", "sy", "ex", "ey"} }
+local rect = rect or object({ _init = { "sx", "sy", "ex", "ey" } })
 
 ---Create a new rect from position and size
 ---@param x number X position
----@param y number Y position  
+---@param y number Y position
 ---@param w number Width
 ---@param h number Height
 ---@return ltui.rect New rectangle
 function rect:new(x, y, w, h)
-    return rect { x, y, x + w, y + h }
+	return rect({ x, y, x + w, y + h })
 end
 
 ---Get rect size as a point
 ---@return ltui.point Point with width and height
 function rect:size()
-    return point { self.ex - self.sx, self.ey - self.sy }
+	return point({ self.ex - self.sx, self.ey - self.sy })
 end
 
 ---Get rect width
 ---@return number Width of rectangle
 function rect:width()
-    return self.ex - self.sx
+	return self.ex - self.sx
 end
 
 ---Get rect height
 ---@return number Height of rectangle
 function rect:height()
-    return self.ey - self.sy
+	return self.ey - self.sy
 end
 
 -- resize rect
 function rect:resize(w, h)
-    self.ex = self.sx + w
-    self.ey = self.sy + h
+	self.ex = self.sx + w
+	self.ey = self.sy + h
 end
 
 -- move rect
 function rect:move(dx, dy)
-    self.sx = self.sx + dx
-    self.sy = self.sy + dy
-    self.ex = self.ex + dx
-    self.ey = self.ey + dy
-    return self
+	self.sx = self.sx + dx
+	self.sy = self.sy + dy
+	self.ex = self.ex + dx
+	self.ey = self.ey + dy
+	return self
 end
 
 -- move rect to the given position
 function rect:move2(x, y)
-    local w = self.ex - self.sx
-    local h = self.ey - self.sy
-    self.sx = x
-    self.sy = y
-    self.ex = x + w
-    self.ey = y + h
-    return self
+	local w = self.ex - self.sx
+	local h = self.ey - self.sy
+	self.sx = x
+	self.sy = y
+	self.ex = x + w
+	self.ey = y + h
+	return self
 end
 
 -- move top right corner of the rect
 function rect:moves(dx, dy)
-    self.sx = self.sx + dx
-    self.sy = self.sy + dy
-    return self
+	self.sx = self.sx + dx
+	self.sy = self.sy + dy
+	return self
 end
 
 -- move bottom left corner of the rect
 function rect:movee(dx, dy)
-    self.ex = self.ex + dx
-    self.ey = self.ey + dy
-    return self
+	self.ex = self.ex + dx
+	self.ey = self.ey + dy
+	return self
 end
 
 -- expand rect area
 function rect:grow(dx, dy)
-    self.sx = self.sx - dx
-    self.sy = self.sy - dy
-    self.ex = self.ex + dx
-    self.ey = self.ey + dy
-    return self
+	self.sx = self.sx - dx
+	self.sy = self.sy - dy
+	self.ex = self.ex + dx
+	self.ey = self.ey + dy
+	return self
 end
 
 -- is intersect?
 function rect:is_intersect(r)
-    return not self():intersect(r):empty()
+	return not self():intersect(r):empty()
 end
 
 -- set rect with shared area between this rect and a given rect
 function rect:intersect(r)
-    self.sx = math.max(self.sx, r.sx)
-    self.sy = math.max(self.sy, r.sy)
-    self.ex = math.min(self.ex, r.ex)
-    self.ey = math.min(self.ey, r.ey)
-    return self
+	self.sx = math.max(self.sx, r.sx)
+	self.sy = math.max(self.sy, r.sy)
+	self.ex = math.min(self.ex, r.ex)
+	self.ey = math.min(self.ey, r.ey)
+	return self
 end
 
 -- get rect with shared area between two rects: local rect_new = r1 / r2
 function rect:__div(r)
-    return self():intersect(r)
+	return self():intersect(r)
 end
 
 -- set union rect
 function rect:union(r)
-    self.sx = math.min(self.sx, r.sx)
-    self.sy = math.min(self.sy, r.sy)
-    self.ex = math.max(self.ex, r.ex)
-    self.ey = math.max(self.ey, r.ey)
-    return self
+	self.sx = math.min(self.sx, r.sx)
+	self.sy = math.min(self.sy, r.sy)
+	self.ex = math.max(self.ex, r.ex)
+	self.ey = math.max(self.ey, r.ey)
+	return self
 end
 
 -- get union rect: local rect_new = r1 + r2
 function rect:__add(r)
-    return self():union(r)
+	return self():union(r)
 end
 
 -- r1 == r1?
 function rect:__eq(r)
-    return
-        self.sx == r.sx and
-        self.sy == r.sy and
-        self.ex == r.ex and
-        self.ey == r.ey
+	return self.sx == r.sx and self.sy == r.sy and self.ex == r.ex and self.ey == r.ey
 end
 
 ---Check if point is contained within rect
@@ -156,32 +152,32 @@ end
 ---@param y number Y coordinate
 ---@return boolean True if point is inside rectangle
 function rect:contains(x, y)
-    return x >= self.sx and x < self.ex and y >= self.sy and y < self.ey
+	return x >= self.sx and x < self.ex and y >= self.sy and y < self.ey
 end
 
 ---Check if rectangle is empty
 ---@return boolean True if rectangle has zero or negative area
 function rect:empty()
-    return self.sx >= self.ex or self.sy >= self.ey
+	return self.sx >= self.ex or self.sy >= self.ey
 end
 
 -- tostring(r)
 function rect:__tostring()
-    if self:empty() then
-        return '[]'
-    end
-    return string.format("[%d, %d, %d, %d]", self.sx, self.sy, self.ex, self.ey)
+	if self:empty() then
+		return "[]"
+	end
+	return string.format("[%d, %d, %d, %d]", self.sx, self.sy, self.ex, self.ey)
 end
 
 -- r1 .. r2
 function rect.__concat(op1, op2)
-    if type(op1) == 'string' then
-        return op1 .. op2:__tostring()
-    elseif type(op2) == 'string' then
-        return op1:__tostring() .. op2
-    else
-        return op1:__tostring() .. op2:__tostring()
-    end
+	if type(op1) == "string" then
+		return op1 .. op2:__tostring()
+	elseif type(op2) == "string" then
+		return op1:__tostring() .. op2
+	else
+		return op1:__tostring() .. op2:__tostring()
+	end
 end
 
 ---@type ltui.rect
