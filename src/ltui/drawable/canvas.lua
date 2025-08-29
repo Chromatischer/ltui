@@ -65,15 +65,11 @@ function drawable_canvas:clear_buffer()
 	local width = bounds:width()
 	local height = bounds:height()
 
+	-- Initialize empty buffer - only store actual drawings, not background
 	self._drawing_buffer = {}
 	for y = 1, height do
 		self._drawing_buffer[y] = {}
-		for x = 1, width do
-			self._drawing_buffer[y][x] = {
-				char = self._background_char,
-				attr = nil,
-			}
-		end
+		-- Don't fill with background characters - leave empty
 	end
 
 	self:invalidate()
@@ -141,6 +137,29 @@ function drawable_canvas:get_pixel(x, y)
 	end
 
 	return self._background_char, nil
+end
+
+-- clear pixel (remove from buffer, effectively setting to background)
+---@param x integer X coordinate (1-based)
+---@param y integer Y coordinate (1-based)
+---@return ltui.drawable.canvas Self for chaining
+function drawable_canvas:clear_pixel(x, y)
+	local bounds = self:bounds()
+	local width = bounds:width()
+	local height = bounds:height()
+
+	-- check bounds
+	if x < 1 or x > width or y < 1 or y > height then
+		return self
+	end
+
+	-- clear pixel by removing it from buffer
+	if self._drawing_buffer[y] then
+		self._drawing_buffer[y][x] = nil
+	end
+
+	self:invalidate()
+	return self
 end
 
 -- draw line from (x1,y1) to (x2,y2) using given character
@@ -273,7 +292,8 @@ function drawable_canvas:on_draw(transparent)
 		if self._drawing_buffer[y] then
 			for x = 1, width do
 				local pixel = self._drawing_buffer[y][x]
-				if pixel then
+				-- Only render pixels that contain actual drawing data
+				if pixel and pixel.char and pixel.char ~= self._background_char then
 					-- canvas uses 0-based coordinates, and move takes (x, y)
 					canvas:move(x - 1, y - 1)
 					if pixel.attr then
