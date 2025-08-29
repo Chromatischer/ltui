@@ -24,12 +24,13 @@
 ---@field border ltui.border Border drawing utilities
 ---@field boxdialog ltui.boxdialog Box dialog component
 ---@field button ltui.button Button component
----@field canvas ltui.canvas Canvas for drawing  
+---@field canvas ltui.canvas Canvas for drawing
 ---@field choicebox ltui.choicebox Choice selection component
 ---@field choicedialog ltui.choicedialog Choice selection dialog
 ---@field curses ltui.curses Curses terminal interface
 ---@field desktop ltui.desktop Desktop/workspace component
 ---@field dialog ltui.dialog Base dialog component
+---@field drawable table Drawable components namespace
 ---@field event ltui.event Event system
 ---@field inputdialog ltui.inputdialog Text input dialog
 ---@field label ltui.label Text label component
@@ -51,35 +52,40 @@
 local ltui = ltui or {}
 
 -- register modules
-ltui.action       = require("ltui/action")
-ltui.application  = require("ltui/application")
-ltui.border       = require("ltui/border")
-ltui.boxdialog    = require("ltui/boxdialog")
-ltui.button       = require("ltui/button")
-ltui.canvas       = require("ltui/canvas")
-ltui.choicebox    = require("ltui/choicebox")
+ltui.action = require("ltui/action")
+ltui.application = require("ltui/application")
+ltui.border = require("ltui/border")
+ltui.boxdialog = require("ltui/boxdialog")
+ltui.button = require("ltui/button")
+ltui.canvas = require("ltui/canvas")
+ltui.choicebox = require("ltui/choicebox")
 ltui.choicedialog = require("ltui/choicedialog")
-ltui.curses       = require("ltui/curses")
-ltui.desktop      = require("ltui/desktop")
-ltui.dialog       = require("ltui/dialog")
-ltui.event        = require("ltui/event")
-ltui.inputdialog  = require("ltui/inputdialog")
-ltui.label        = require("ltui/label")
-ltui.mconfdialog  = require("ltui/mconfdialog")
-ltui.menubar      = require("ltui/menubar")
-ltui.menuconf     = require("ltui/menuconf")
-ltui.object       = require("ltui/object")
-ltui.panel        = require("ltui/panel")
-ltui.point        = require("ltui/point")
-ltui.program      = require("ltui/program")
-ltui.rect         = require("ltui/rect")
-ltui.scrollbar    = require("ltui/scrollbar")
-ltui.statusbar    = require("ltui/statusbar")
-ltui.textarea     = require("ltui/textarea")
-ltui.textdialog   = require("ltui/textdialog")
-ltui.textedit     = require("ltui/textedit")
-ltui.view         = require("ltui/view")
-ltui.window       = require("ltui/window")
+ltui.curses = require("ltui/curses")
+ltui.desktop = require("ltui/desktop")
+ltui.dialog = require("ltui/dialog")
+ltui.drawable = {
+	canvas = require("ltui/drawable/canvas"),
+	drawtool = require("ltui/drawable/drawtool"),
+	linedraw = require("ltui/drawable/linedraw"),
+}
+ltui.event = require("ltui/event")
+ltui.inputdialog = require("ltui/inputdialog")
+ltui.label = require("ltui/label")
+ltui.mconfdialog = require("ltui/mconfdialog")
+ltui.menubar = require("ltui/menubar")
+ltui.menuconf = require("ltui/menuconf")
+ltui.object = require("ltui/object")
+ltui.panel = require("ltui/panel")
+ltui.point = require("ltui/point")
+ltui.program = require("ltui/program")
+ltui.rect = require("ltui/rect")
+ltui.scrollbar = require("ltui/scrollbar")
+ltui.statusbar = require("ltui/statusbar")
+ltui.textarea = require("ltui/textarea")
+ltui.textdialog = require("ltui/textdialog")
+ltui.textedit = require("ltui/textedit")
+ltui.view = require("ltui/view")
+ltui.window = require("ltui/window")
 
 ---@type ltui
 return ltui
